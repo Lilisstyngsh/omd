@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Edit Akun'); ?>
 <?php $__env->startSection('header', 'Edit Akun'); ?>
 
@@ -82,7 +80,7 @@ unset($__errorArgs, $__bag); ?>
             <div class="field" style="margin-top:16px;">
 
                 <label for="user_group">
-                    Bagian
+                    Plant
                 </label>
 
                 <select id="user_group" name="user_group" required>

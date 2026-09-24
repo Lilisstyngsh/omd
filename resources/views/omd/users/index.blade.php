@@ -7,9 +7,8 @@
 
     <div class="page-head">
         <div>
-            <h2>Manajemen Akun User</h2>
+            <h2>Data Akun User</h2>
             <div class="muted">
-                Kelola akun Leader PPIC dan Leader Produksi.
             </div>
         </div>
 
@@ -41,7 +40,7 @@
                         <th style="width:70px;">No</th>
                         <th>Nama</th>
                         <th>Email</th>
-                        <th style="width:150px;">Bagian</th>
+                        <th style="width:150px;">Plant</th>
                         <th style="width:160px;">Aksi</th>
                     </tr>
                 </thead>

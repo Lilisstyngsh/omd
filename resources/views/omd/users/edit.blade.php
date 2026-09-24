@@ -66,7 +66,7 @@
             <div class="field" style="margin-top:16px;">
 
                 <label for="user_group">
-                    Bagian
+                    Plant
                 </label>
 
                 <select id="user_group" name="user_group" required>

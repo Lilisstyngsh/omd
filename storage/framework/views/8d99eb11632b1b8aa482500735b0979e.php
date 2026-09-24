@@ -1,9 +1,7 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Area / Line - ' . $plant->name); ?>
+<?php $__env->startSection('header', 'Area / Line - ' . $plant->name); ?>
 
-@section('title', 'Area / Line - ' . $plant->name)
-@section('header', 'Area / Line - ' . $plant->name)
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <style>
         .master-hero {
@@ -143,39 +141,41 @@
     </style>
 
 
-    {{-- Breadcrumb --}}
+    
     <div class="breadcrumb">
 
-        <a href="{{ route('omd.master.index', [
+        <a href="<?php echo e(route('omd.master.index', [
             'scope' => $scope
-        ]) }}">
+        ])); ?>">
             Data Master
         </a>
 
         <span>›</span>
 
-        <a href="{{ route('omd.master.index', [
+        <a href="<?php echo e(route('omd.master.index', [
             'scope' => $scope
-        ]) }}">
-            {{ $scopeLabel }}
+        ])); ?>">
+            <?php echo e($scopeLabel); ?>
+
         </a>
 
         <span>›</span>
 
         <strong>
-            {{ $plant->name }}
+            <?php echo e($plant->name); ?>
+
         </strong>
 
     </div>
 
 
-    {{-- Back --}}
+    
     <div class="back-button">
 
         <a
-            href="{{ route('omd.master.index', [
+            href="<?php echo e(route('omd.master.index', [
                 'scope' => $scope
-            ]) }}"
+            ])); ?>"
             class="btn btn-secondary"
         >
             ← Kembali ke Plant
@@ -184,11 +184,12 @@
     </div>
 
 
-    {{-- Hero --}}
+    
     <div class="master-hero">
 
         <h2>
-            Area / Line - {{ $plant->name }}
+            Area / Line - <?php echo e($plant->name); ?>
+
         </h2>
 
         <p>
@@ -198,7 +199,7 @@
     </div>
 
 
-    {{-- Header --}}
+    
     <div class="page-head">
 
         <div>
@@ -208,8 +209,10 @@
             </h3>
 
             <div class="muted">
-                Plant {{ $plant->name }}
-                · Scope {{ strtoupper($scopeLabel) }}
+                Plant <?php echo e($plant->name); ?>
+
+                · Scope <?php echo e(strtoupper($scopeLabel)); ?>
+
             </div>
 
         </div>
@@ -217,8 +220,8 @@
     </div>
 
 
-    {{-- Area --}}
-    @if ($areas->isEmpty())
+    
+    <?php if($areas->isEmpty()): ?>
 
         <div class="card empty-card">
 
@@ -231,19 +234,19 @@
 
         </div>
 
-    @else
+    <?php else: ?>
 
         <div class="master-grid">
 
-            @foreach ($areas as $area)
+            <?php $__currentLoopData = $areas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $area): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                 <a
                     class="master-card"
-                    href="{{ route('omd.master.area.index', [
+                    href="<?php echo e(route('omd.master.area.index', [
                         'scope' => $scope,
                         'plant' => $plant,
                         'area' => $area
-                    ]) }}"
+                    ])); ?>"
                 >
 
                     <div class="master-card-top">
@@ -254,7 +257,8 @@
 
                         <span class="badge-soft">
 
-                            {{ $area->master_models_count ?? 0 }}
+                            <?php echo e($area->master_models_count ?? 0); ?>
+
                             Model
 
                         </span>
@@ -265,13 +269,14 @@
                     <div style="margin-top:16px;">
 
                         <h3>
-                            {{ $area->name }}
+                            <?php echo e($area->name); ?>
+
                         </h3>
 
                         <p>
                             Kelola Model dan Produk
                             pada Area / Line
-                            {{ $area->name }}.
+                            <?php echo e($area->name); ?>.
                         </p>
 
                     </div>
@@ -280,7 +285,8 @@
                     <div class="master-card-footer">
 
                         <span class="muted">
-                            Plant {{ $plant->name }}
+                            Plant <?php echo e($plant->name); ?>
+
                         </span>
 
                         <span class="btn-link">
@@ -291,10 +297,11 @@
 
                 </a>
 
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </div>
 
-    @endif
+    <?php endif; ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\omd\resources\views/omd/master/plants.blade.php ENDPATH**/ ?>

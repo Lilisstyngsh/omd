@@ -65,7 +65,7 @@ unset($__errorArgs, $__bag); ?>
             </div>
 
             <div class="field" style="margin-top:16px;">
-                <label for="user_group">Bagian</label>
+                <label for="user_group">Plant</label>
 
                 <select id="user_group" name="user_group" required>
                     <option value="">Pilih Bagian</option>

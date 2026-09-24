@@ -150,18 +150,6 @@
         <strong><?php echo e($scopeLabel); ?></strong>
     </div>
 
-
-    
-    <div class="master-hero">
-        <h2>Data Master <?php echo e($scopeLabel); ?></h2>
-
-        <p>
-            Pilih Plant terlebih dahulu untuk melihat Area / Line,
-            kemudian kelola Model dan Produk.
-        </p>
-    </div>
-
-
     
     <div class="card" style="margin-bottom:20px;">
         <div
@@ -178,11 +166,6 @@
                 <h3 style="margin:0;">
                     Tambah Plant
                 </h3>
-
-                <div class="muted" style="margin-top:5px;">
-                    Tambahkan Plant untuk scope
-                    <?php echo e($scopeLabel); ?>.
-                </div>
             </div>
 
 
@@ -214,7 +197,7 @@
                     type="submit"
                     class="btn btn-primary"
                 >
-                    Tambah Plant
+                    Tambah
                 </button>
             </form>
 
@@ -230,10 +213,6 @@
                 Plant <?php echo e($scopeLabel); ?>
 
             </h3>
-
-            <div class="muted">
-                Pilih Plant untuk melihat Area / Line.
-            </div>
         </div>
 
 
@@ -301,12 +280,8 @@
 
                     <div class="master-card-top">
 
-                        <div class="master-icon">
-                            ▣
-                        </div>
-
                         <span class="badge-soft">
-                            <?php echo e($plant->areas_count); ?> Area / Line
+                            <?php echo e($plant->areas_count); ?> Line
                         </span>
 
                     </div>
@@ -319,20 +294,10 @@
 
                         </h3>
 
-                        <p>
-                            Kelola Area / Line
-                            pada Plant <?php echo e($plant->name); ?>.
-                        </p>
-
                     </div>
 
 
                     <div class="master-card-footer">
-
-                        <span class="muted">
-                            Scope <?php echo e(strtoupper($plant->data_scope)); ?>
-
-                        </span>
 
                         <span class="btn-link">
                             Lihat Area →

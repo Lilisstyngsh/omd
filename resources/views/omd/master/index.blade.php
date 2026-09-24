@@ -152,18 +152,6 @@
         <strong>{{ $scopeLabel }}</strong>
     </div>
 
-
-    {{-- Hero --}}
-    <div class="master-hero">
-        <h2>Data Master {{ $scopeLabel }}</h2>
-
-        <p>
-            Pilih Plant terlebih dahulu untuk melihat Area / Line,
-            kemudian kelola Model dan Produk.
-        </p>
-    </div>
-
-
     {{-- Tambah Plant --}}
     <div class="card" style="margin-bottom:20px;">
         <div
@@ -180,11 +168,6 @@
                 <h3 style="margin:0;">
                     Tambah Plant
                 </h3>
-
-                <div class="muted" style="margin-top:5px;">
-                    Tambahkan Plant untuk scope
-                    {{ $scopeLabel }}.
-                </div>
             </div>
 
 
@@ -216,7 +199,7 @@
                     type="submit"
                     class="btn btn-primary"
                 >
-                    Tambah Plant
+                    Tambah
                 </button>
             </form>
 
@@ -231,10 +214,6 @@
             <h3 style="margin:0;">
                 Plant {{ $scopeLabel }}
             </h3>
-
-            <div class="muted">
-                Pilih Plant untuk melihat Area / Line.
-            </div>
         </div>
 
 
@@ -302,12 +281,8 @@
 
                     <div class="master-card-top">
 
-                        <div class="master-icon">
-                            ▣
-                        </div>
-
                         <span class="badge-soft">
-                            {{ $plant->areas_count }} Area / Line
+                            {{ $plant->areas_count }} Line
                         </span>
 
                     </div>
@@ -319,19 +294,10 @@
                             {{ $plant->name }}
                         </h3>
 
-                        <p>
-                            Kelola Area / Line
-                            pada Plant {{ $plant->name }}.
-                        </p>
-
                     </div>
 
 
                     <div class="master-card-footer">
-
-                        <span class="muted">
-                            Scope {{ strtoupper($plant->data_scope) }}
-                        </span>
 
                         <span class="btn-link">
                             Lihat Area →

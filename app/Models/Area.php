@@ -3,18 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Area extends Model
 {
-    protected $fillable = ['category', 'name', 'is_active'];
-    protected $casts = ['is_active' => 'boolean'];
-    public function users(): HasMany
+    protected $fillable = [
+        'plant_id',
+        'name',
+    ];
+
+    public function plant(): BelongsTo
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Plant::class);
     }
-    public function orders(): HasMany
+
+    public function masterModels(): HasMany
     {
-        return $this->hasMany(RepairOrder::class);
+        return $this->hasMany(MasterModel::class, 'area_id');
     }
 }
