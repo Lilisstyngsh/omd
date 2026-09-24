@@ -1198,7 +1198,7 @@
                             <span class="nav-icon">▣</span>
 
                             <span>
-                                Order Repair
+                                Order Repair Box
                             </span>
 
                         </a>
@@ -1210,7 +1210,7 @@
                             <span class="nav-icon">⚙</span>
 
                             <span>
-                                TPS Tool
+                                Order TPS Tools
                             </span>
 
                         </a>
@@ -1223,7 +1223,7 @@
                             <span class="nav-icon">▣</span>
 
                             <span>
-                                Order Repair
+                                Order Repair Box
                             </span>
 
                         </a>
@@ -1235,7 +1235,7 @@
                             <span class="nav-icon">⚙</span>
 
                             <span>
-                                TPS Tool
+                                Order TPS Tool
                             </span>
 
                         </a>

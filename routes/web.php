@@ -163,19 +163,21 @@ Route::middleware('auth')->group(function () {
 
 
             /*
-            |--------------------------------------------------------------------------
-            | Data Master
-            |--------------------------------------------------------------------------
-            |
-            | Hanya OMD yang dapat mengelola:
-            | - Model
-            | - Produk
-            |
-            | Scope:
-            | - ppic
-            | - produksi
-            |
-            */
+|--------------------------------------------------------------------------
+| Data Master
+|--------------------------------------------------------------------------
+|
+| Hanya OMD Leader yang dapat mengelola Data Master.
+|
+| Struktur:
+|
+| Scope
+|   └── Plant
+|       └── Area / Line
+|           └── Model
+|               └── Produk
+|
+*/
 
             Route::middleware('role:omd_leader')
                 ->prefix('master')
@@ -183,10 +185,15 @@ Route::middleware('auth')->group(function () {
                 ->group(function () {
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | Halaman Data Master
-                    |--------------------------------------------------------------------------
-                    */
+        |--------------------------------------------------------------------------
+        | Halaman Data Master - Plant
+        |--------------------------------------------------------------------------
+        |
+        | Contoh:
+        | /omd/master/ppic
+        | /omd/master/produksi
+        |
+        */
 
                     Route::get('/{scope}', [MasterDataController::class, 'index'])
                         ->whereIn('scope', ['ppic', 'produksi'])
@@ -194,69 +201,171 @@ Route::middleware('auth')->group(function () {
 
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | Model
-                    |--------------------------------------------------------------------------
-                    */
+        |--------------------------------------------------------------------------
+        | Plant
+        |--------------------------------------------------------------------------
+        |
+        | Contoh:
+        | /omd/master/ppic/plant/{plant}
+        |
+        | Menampilkan Area / Line berdasarkan Plant.
+        |
+        */
 
-                    // Tambah Model
-                    Route::post('/{scope}/model', [MasterDataController::class, 'storeModel'])
+                    Route::get(
+                        '/{scope}/plant/{plant}',
+                        [MasterDataController::class, 'plant']
+                    )
+                        ->whereIn('scope', ['ppic', 'produksi'])
+                        ->name('plant.index');
+
+
+                    /*
+        |--------------------------------------------------------------------------
+        | Tambah Plant
+        |--------------------------------------------------------------------------
+        |
+        | Plant dibuat berdasarkan scope yang sedang dibuka.
+        |
+        */
+
+                    Route::post(
+                        '/{scope}/plant',
+                        [MasterDataController::class, 'storePlant']
+                    )
+                        ->whereIn('scope', ['ppic', 'produksi'])
+                        ->name('plant.store');
+
+
+                    /*
+        |--------------------------------------------------------------------------
+        | Area / Line
+        |--------------------------------------------------------------------------
+        |
+        | Contoh:
+        | /omd/master/ppic/plant/1/area/1
+        |
+        | Menampilkan Model dan Produk berdasarkan Area.
+        |
+        */
+
+                    Route::get(
+                        '/{scope}/plant/{plant}/area/{area}',
+                        [MasterDataController::class, 'area']
+                    )
+                        ->whereIn('scope', ['ppic', 'produksi'])
+                        ->name('area.index');
+
+
+                    /*
+        |--------------------------------------------------------------------------
+        | Model
+        |--------------------------------------------------------------------------
+        |
+        | Model dibuat berdasarkan:
+        |
+        | Scope
+        | Plant
+        | Area
+        |
+        */
+
+                    Route::post(
+                        '/{scope}/plant/{plant}/area/{area}/model',
+                        [MasterDataController::class, 'storeModel']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('model.store');
 
-                    Route::get('/{scope}/model/{masterModel}/edit', [MasterDataController::class, 'editModel'])
+
+                    Route::get(
+                        '/{scope}/plant/{plant}/area/{area}/model/{masterModel}/edit',
+                        [MasterDataController::class, 'editModel']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('model.edit');
 
-                    Route::put('/{scope}/model/{masterModel}', [MasterDataController::class, 'updateModel'])
+
+                    Route::put(
+                        '/{scope}/plant/{plant}/area/{area}/model/{masterModel}',
+                        [MasterDataController::class, 'updateModel']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('model.update');
 
-                    Route::delete('/{scope}/model/{masterModel}', [MasterDataController::class, 'destroyModel'])
+
+                    Route::delete(
+                        '/{scope}/plant/{plant}/area/{area}/model/{masterModel}',
+                        [MasterDataController::class, 'destroyModel']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('model.destroy');
 
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | Produk
-                    |--------------------------------------------------------------------------
-                    */
+        |--------------------------------------------------------------------------
+        | Produk
+        |--------------------------------------------------------------------------
+        |
+        | Produk dibuat di dalam konteks:
+        |
+        | Scope
+        | Plant
+        | Area
+        | Model
+        |
+        */
 
-                    // Tambah Produk
-                    Route::post('/{scope}/product', [MasterDataController::class, 'storeProduct'])
+                    Route::post(
+                        '/{scope}/plant/{plant}/area/{area}/product',
+                        [MasterDataController::class, 'storeProduct']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('product.store');
 
-                    // Form Edit Produk
-                    Route::get('/{scope}/product/{product}/edit', [MasterDataController::class, 'editProduct'])
+
+                    Route::get(
+                        '/{scope}/plant/{plant}/area/{area}/product/{product}/edit',
+                        [MasterDataController::class, 'editProduct']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('product.edit');
 
-                    // Update Produk
-                    Route::put('/{scope}/product/{product}', [MasterDataController::class, 'updateProduct'])
+
+                    Route::put(
+                        '/{scope}/plant/{plant}/area/{area}/product/{product}',
+                        [MasterDataController::class, 'updateProduct']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('product.update');
 
-                    // Hapus Produk
-                    Route::delete('/{scope}/product/{product}', [MasterDataController::class, 'destroyProduct'])
+
+                    Route::delete(
+                        '/{scope}/plant/{plant}/area/{area}/product/{product}',
+                        [MasterDataController::class, 'destroyProduct']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('product.destroy');
 
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | Export Data Master
-                    |--------------------------------------------------------------------------
-                    */
+        |--------------------------------------------------------------------------
+        | Export Data Master
+        |--------------------------------------------------------------------------
+        */
 
-                    // Export Excel
-                    Route::get('/{scope}/export/excel', [MasterDataController::class, 'exportExcel'])
+                    Route::get(
+                        '/{scope}/export/excel',
+                        [MasterDataController::class, 'exportExcel']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('export.excel');
 
-                    // Export PDF
-                    Route::get('/{scope}/export/pdf', [MasterDataController::class, 'exportPdf'])
+
+                    Route::get(
+                        '/{scope}/export/pdf',
+                        [MasterDataController::class, 'exportPdf']
+                    )
                         ->whereIn('scope', ['ppic', 'produksi'])
                         ->name('export.pdf');
                 });

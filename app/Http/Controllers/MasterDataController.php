@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plant;
+use App\Models\Area;
 use App\Models\MasterModel;
 use App\Models\Product;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,68 +29,121 @@ class MasterDataController extends Controller
     /**
      * Menampilkan Data Master Model & Produk.
      */
-    public function index(string $scope, ?int $model = null)
+    public function index(string $scope)
     {
         $this->validateScope($scope);
 
-        $models = MasterModel::query()
-            ->where('data_scope', $scope)
-            ->with([
-                'products' => fn($query) => $query->orderBy('name')
-            ])
-            ->orderBy('number')
+        $plants = Plant::where('data_scope', $scope)
+            ->withCount('areas')
+            ->orderBy('name')
             ->get();
 
         return view('omd.master.index', [
             'scope' => $scope,
             'scopeLabel' => $this->scopeLabel($scope),
+            'plants' => $plants,
+        ]);
+    }
+
+
+    /**
+     * Menambahkan Plant.
+     */
+    public function storePlant(Request $request, string $scope)
+    {
+        $this->validateScope($scope);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+        ]);
+
+        Plant::create([
+            'name' => $validated['name'],
+            'data_scope' => $scope,
+        ]);
+
+        return redirect()
+            ->route('omd.master.index', ['scope' => $scope])
+            ->with('success', 'Plant berhasil ditambahkan.');
+    }
+
+    public function plant(string $scope, Plant $plant)
+    {
+        $this->validateScope($scope);
+
+        abort_unless($plant->data_scope === $scope, 404);
+
+        $plant->load([
+            'areas' => function ($query) {
+                $query->withCount('masterModels');
+            }
+        ]);
+
+        return view('omd.master.plants', [
+            'scope' => $scope,
+            'scopeLabel' => $this->scopeLabel($scope),
+            'plant' => $plant,
+            'areas' => $plant->areas,
+        ]);
+    }
+
+    public function area(
+        string $scope,
+        Plant $plant,
+        Area $area
+    ) {
+        $this->validateScope($scope);
+
+        abort_unless($plant->data_scope === $scope, 404);
+        abort_unless($area->plant_id === $plant->id, 404);
+
+        $models = MasterModel::where('data_scope', $scope)
+            ->where('plant_id', $plant->id)
+            ->where('area_id', $area->id)
+            ->with('products')
+            ->orderBy('name')
+            ->get();
+
+        return view('omd.master.models', [
+            'scope' => $scope,
+            'scopeLabel' => $this->scopeLabel($scope),
+            'plant' => $plant,
+            'area' => $area,
             'models' => $models,
-            'selectedModelId' => $model,
         ]);
     }
 
     /**
      * Menambahkan Model.
      */
-    public function storeModel(Request $request, string $scope)
-    {
+    public function storeModel(
+        Request $request,
+        string $scope,
+        Plant $plant,
+        Area $area
+    ) {
         $this->validateScope($scope);
 
+        abort_unless($plant->data_scope === $scope, 404);
+        abort_unless($area->plant_id === $plant->id, 404);
+
         $validated = $request->validate([
-            'model' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:150'],
         ]);
 
-        $modelName = trim($validated['model']);
-
-        $exists = MasterModel::where('data_scope', $scope)
-            ->whereRaw(
-                'LOWER(model) = ?',
-                [strtolower($modelName)]
-            )
-            ->exists();
-
-        if ($exists) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'model' => 'Model tersebut sudah terdaftar pada data '
-                        . strtoupper($scope) . '.',
-                ]);
-        }
-
-        $nextNumber = (
-            (int) MasterModel::where('data_scope', $scope)
-                ->max('number')
-        ) + 1;
-
         MasterModel::create([
+            'name' => $validated['name'],
             'data_scope' => $scope,
-            'number' => $nextNumber,
-            'model' => $modelName,
+            'plant_id' => $plant->id,
+            'area_id' => $area->id,
         ]);
 
         return redirect()
-            ->route('omd.master.index', ['scope' => $scope])
+            ->route('omd.master.area.index', [
+                'scope' => $scope,
+                'plant' => $plant,
+                'area' => $area,
+            ])
             ->with('success', 'Model berhasil ditambahkan.');
     }
 

@@ -1,243 +1,352 @@
-<?php $__env->startSection('title', 'Data ' . $scopeLabel); ?>
-<?php $__env->startSection('header', 'Data ' . $scopeLabel); ?>
+<?php $__env->startSection('title', 'Data Master ' . $scopeLabel); ?>
+<?php $__env->startSection('header', 'Data Master ' . $scopeLabel); ?>
 
 <?php $__env->startSection('content'); ?>
     <style>
-        .master-table th,
-        .master-table td {
-            border: 1px solid #d9dee8;
-            vertical-align: middle;
+        .master-hero {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed 58%, #8b5cf6);
+            color: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 30px rgba(124, 58, 237, .18);
         }
 
-        .master-table th {
-            background: #f7f8fa;
+        .master-hero h2 {
+            margin: 0 0 6px;
         }
 
-        .master-table .col-no {
-            width: 70px;
-            text-align: center;
+        .master-hero p {
+            margin: 0;
+            color: rgba(255, 255, 255, .78);
         }
 
-        .master-table .col-model {
-            width: 180px;
-        }
-
-        .master-table .col-product-no {
-            width: 80px;
-            text-align: center;
-        }
-
-        .master-table .col-action {
-            width: 190px;
-            text-align: center;
-        }
-
-        .action-inline {
-            display: inline-flex;
-            gap: 6px;
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            align-items: center;
             flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #667085;
         }
 
-        .btn-sm {
-            padding: 7px 10px;
+        .breadcrumb a {
+            color: #6d28d9;
+            font-weight: 650;
+        }
+
+        .master-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .master-card {
+            display: block;
+            border: 1px solid #e8e5f0;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 22px rgba(58, 35, 120, .06);
+            transition: .2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .master-card:hover {
+            transform: translateY(-3px);
+            border-color: #c4b5fd;
+            box-shadow: 0 12px 28px rgba(124, 58, 237, .12);
+        }
+
+        .master-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .master-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ede9fe;
+            color: #6d28d9;
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .master-card h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .master-card p {
+            margin: 8px 0 0;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .master-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .badge-soft {
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #f5f3ff;
+            color: #6d28d9;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .btn-link {
+            color: #6d28d9;
+            font-weight: 700;
             font-size: 12px;
         }
 
-        .export-actions {
+        .plant-form {
             display: flex;
-            gap: 8px;
+            gap: 10px;
+            align-items: end;
             flex-wrap: wrap;
+        }
+
+        .plant-form .field {
+            margin: 0;
+            min-width: 240px;
+        }
+
+        @media (max-width: 700px) {
+            .master-hero {
+                padding: 18px;
+            }
+
+            .plant-form {
+                width: 100%;
+            }
+
+            .plant-form .field {
+                width: 100%;
+                min-width: 0;
+            }
         }
     </style>
 
-    <div class="page-head">
-        <div>
-            <h2>Master Model & Produk <?php echo e($scopeLabel); ?></h2>
-            <div class="muted"></div>
-        </div>
 
-        <div class="export-actions">
-            <a class="btn btn-success" href="<?php echo e(route('omd.master.export.excel', $scope)); ?>">
-                Export Excel
-            </a>
-
-            <a class="btn btn-danger" href="<?php echo e(route('omd.master.export.pdf', $scope)); ?>">
-                Export PDF
-            </a>
-        </div>
+    
+    <div class="breadcrumb">
+        <span>Data Master</span>
+        <span>›</span>
+        <strong><?php echo e($scopeLabel); ?></strong>
     </div>
 
-    <div class="grid2" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
-        <div class="card">
-            <h3 style="margin-top:0;">Tambah Model</h3>
 
-            <form method="POST" action="<?php echo e(route('omd.master.model.store', $scope)); ?>">
-                <?php echo csrf_field(); ?>
+    
+    <div class="master-hero">
+        <h2>Data Master <?php echo e($scopeLabel); ?></h2>
 
-                <div class="field">
-                    <label for="model">Model</label>
-                    <input id="model" name="model" value="<?php echo e(old('model')); ?>" placeholder="Masukkan model" required>
-                </div>
-
-                <button class="btn btn-primary" style="margin-top:14px;">
-                    Simpan Model
-                </button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-top:0;">Tambah Produk</h3>
-            <div class="muted" style="margin-bottom:16px;"></div>
-
-            <form method="POST" action="<?php echo e(route('omd.master.product.store', $scope)); ?>">
-                <?php echo csrf_field(); ?>
-
-                <div class="field">
-                    <label for="master_model_id">Model</label>
-                    <select id="master_model_id" name="master_model_id" required>
-                        <option value="">Pilih model</option>
-
-                        <?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($model->id); ?>" <?php if(old('master_model_id', $selectedModelId) == $model->id): echo 'selected'; endif; ?>>
-                                <?php echo e($model->number); ?> - <?php echo e($model->model); ?>
-
-                            </option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </div>
-
-                <div class="field" style="margin-top:14px;">
-                    <label for="product">Produk</label>
-                    <input id="product" name="product" value="<?php echo e(old('product')); ?>" placeholder="Masukkan produk" required>
-                </div>
-
-                <button class="btn btn-primary" style="margin-top:14px;">
-                    Simpan Produk
-                </button>
-            </form>
-        </div>
+        <p>
+            Pilih Plant terlebih dahulu untuk melihat Area / Line,
+            kemudian kelola Model dan Produk.
+        </p>
     </div>
 
-    <div class="card">
-        <div class="page-head" style="margin-bottom:16px;">
+
+    
+    <div class="card" style="margin-bottom:20px;">
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:16px;
+                flex-wrap:wrap;
+            "
+        >
+
             <div>
-                <h3 style="margin:0;">Data Model & Produk <?php echo e($scopeLabel); ?></h3>
-                <div class="muted">
+                <h3 style="margin:0;">
+                    Tambah Plant
+                </h3>
+
+                <div class="muted" style="margin-top:5px;">
+                    Tambahkan Plant untuk scope
+                    <?php echo e($scopeLabel); ?>.
                 </div>
+            </div>
+
+
+            <form
+                method="POST"
+                action="<?php echo e(route('omd.master.plant.store', [
+                    'scope' => $scope
+                ])); ?>"
+                class="plant-form"
+            >
+                <?php echo csrf_field(); ?>
+
+                <div class="field">
+                    <label for="plant_name">
+                        Nama Plant
+                    </label>
+
+                    <input
+                        id="plant_name"
+                        name="name"
+                        value="<?php echo e(old('name')); ?>"
+                        placeholder="Contoh: Unit"
+                        required
+                        maxlength="100"
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Tambah Plant
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    
+    <div class="page-head">
+
+        <div>
+            <h3 style="margin:0;">
+                Plant <?php echo e($scopeLabel); ?>
+
+            </h3>
+
+            <div class="muted">
+                Pilih Plant untuk melihat Area / Line.
             </div>
         </div>
 
-        <div class="table-wrap">
-            <table class="table master-table">
-                <thead>
-                    <tr>
-                        <th class="col-no">No</th>
-                        <th class="col-model">Model</th>
-                        <th class="col-product-no">No. Produk</th>
-                        <th>Produk</th>
-                        <th class="col-action">Aksi</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <?php $__empty_1 = true; $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <?php $__empty_2 = true; $__currentLoopData = $model->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
-                            <tr>
-                                <?php if($index === 0): ?>
-                                    <td class="col-no" rowspan="<?php echo e($model->products->count()); ?>">
-                                        <b><?php echo e($model->number); ?></b>
-                                    </td>
+        
+        <div
+            class="export-actions"
+            style="display:flex;gap:8px;flex-wrap:wrap;"
+        >
 
-                                    <td class="col-model" rowspan="<?php echo e($model->products->count()); ?>">
-                                        <b><?php echo e($model->model); ?></b>
+            <a
+                class="btn btn-success"
+                href="<?php echo e(route('omd.master.export.excel', [
+                    'scope' => $scope
+                ])); ?>"
+            >
+                Export Excel
+            </a>
 
-                                        <div style="margin-top:8px;">
-                                            <a class="btn btn-secondary btn-sm"
-                                                href="<?php echo e(route('omd.master.model.edit', [$scope, $model])); ?>">
-                                                Edit Model
-                                            </a>
-                                        </div>
-                                    </td>
-                                <?php endif; ?>
+            <a
+                class="btn btn-danger"
+                href="<?php echo e(route('omd.master.export.pdf', [
+                    'scope' => $scope
+                ])); ?>"
+            >
+                Export PDF
+            </a>
 
-                                <td class="col-product-no">
-                                    <?php echo e($index + 1); ?>
-
-                                </td>
-
-                                <td>
-                                    <?php echo e($product->name); ?>
-
-                                </td>
-
-                                <td class="col-action">
-                                    <div class="action-inline">
-                                        <a class="btn btn-secondary btn-sm"
-                                            href="<?php echo e(route('omd.master.product.edit', [$scope, $product])); ?>">
-                                            Edit
-                                        </a>
-
-                                        <form method="POST"
-                                            action="<?php echo e(route('omd.master.product.destroy', [$scope, $product])); ?>"
-                                            onsubmit="return confirm('Hapus produk <?php echo e(addslashes($product->name)); ?>?')">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-
-                                            <button class="btn btn-danger btn-sm">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
-                            <tr>
-                                <td class="col-no">
-                                    <b><?php echo e($model->number); ?></b>
-                                </td>
-
-                                <td class="col-model">
-                                    <b><?php echo e($model->model); ?></b>
-
-                                    <div style="margin-top:8px;">
-                                        <a class="btn btn-secondary btn-sm"
-                                            href="<?php echo e(route('omd.master.model.edit', [$scope, $model])); ?>">
-                                            Edit Model
-                                        </a>
-                                    </div>
-                                </td>
-
-                                <td class="col-product-no">-</td>
-
-                                <td class="muted">
-                                    Belum ada produk.
-                                </td>
-
-                                <td class="col-action">
-                                    <form method="POST" action="<?php echo e(route('omd.master.model.destroy', [$scope, $model])); ?>"
-                                        onsubmit="return confirm('Hapus model <?php echo e(addslashes($model->model)); ?>?')">
-                                        <?php echo csrf_field(); ?>
-                                        <?php echo method_field('DELETE'); ?>
-
-                                        <button class="btn btn-danger btn-sm">
-                                            Hapus Model
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <tr>
-                            <td colspan="5" class="empty">
-                                Belum ada data model <?php echo e($scopeLabel); ?>.
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
         </div>
-    </div>
-<?php $__env->stopSection(); ?>
 
+    </div>
+
+
+    
+    <?php if($plants->isEmpty()): ?>
+
+        <div class="card">
+
+            <strong>
+                Belum ada Plant <?php echo e($scopeLabel); ?>.
+            </strong>
+
+            <div
+                class="muted"
+                style="margin-top:6px;"
+            >
+                Tambahkan Plant terlebih dahulu
+                untuk membuat struktur Area / Line.
+            </div>
+
+        </div>
+
+    <?php else: ?>
+
+        <div class="master-grid">
+
+            <?php $__currentLoopData = $plants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $plant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                <a
+                    class="master-card"
+                    href="<?php echo e(route('omd.master.plant.index', [
+                        'scope' => $scope,
+                        'plant' => $plant
+                    ])); ?>"
+                >
+
+                    <div class="master-card-top">
+
+                        <div class="master-icon">
+                            ▣
+                        </div>
+
+                        <span class="badge-soft">
+                            <?php echo e($plant->areas_count); ?> Area / Line
+                        </span>
+
+                    </div>
+
+
+                    <div style="margin-top:16px;">
+
+                        <h3>
+                            <?php echo e($plant->name); ?>
+
+                        </h3>
+
+                        <p>
+                            Kelola Area / Line
+                            pada Plant <?php echo e($plant->name); ?>.
+                        </p>
+
+                    </div>
+
+
+                    <div class="master-card-footer">
+
+                        <span class="muted">
+                            Scope <?php echo e(strtoupper($plant->data_scope)); ?>
+
+                        </span>
+
+                        <span class="btn-link">
+                            Lihat Area →
+                        </span>
+
+                    </div>
+
+                </a>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+        </div>
+
+    <?php endif; ?>
+
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\omd\resources\views/omd/master/index.blade.php ENDPATH**/ ?>

@@ -1,240 +1,350 @@
 @extends('layouts.app')
 
-@section('title', 'Data ' . $scopeLabel)
-@section('header', 'Data ' . $scopeLabel)
+@section('title', 'Data Master ' . $scopeLabel)
+@section('header', 'Data Master ' . $scopeLabel)
 
 @section('content')
     <style>
-        .master-table th,
-        .master-table td {
-            border: 1px solid #d9dee8;
-            vertical-align: middle;
+        .master-hero {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed 58%, #8b5cf6);
+            color: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 30px rgba(124, 58, 237, .18);
         }
 
-        .master-table th {
-            background: #f7f8fa;
+        .master-hero h2 {
+            margin: 0 0 6px;
         }
 
-        .master-table .col-no {
-            width: 70px;
-            text-align: center;
+        .master-hero p {
+            margin: 0;
+            color: rgba(255, 255, 255, .78);
         }
 
-        .master-table .col-model {
-            width: 180px;
-        }
-
-        .master-table .col-product-no {
-            width: 80px;
-            text-align: center;
-        }
-
-        .master-table .col-action {
-            width: 190px;
-            text-align: center;
-        }
-
-        .action-inline {
-            display: inline-flex;
-            gap: 6px;
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            align-items: center;
             flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #667085;
         }
 
-        .btn-sm {
-            padding: 7px 10px;
+        .breadcrumb a {
+            color: #6d28d9;
+            font-weight: 650;
+        }
+
+        .master-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .master-card {
+            display: block;
+            border: 1px solid #e8e5f0;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 22px rgba(58, 35, 120, .06);
+            transition: .2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .master-card:hover {
+            transform: translateY(-3px);
+            border-color: #c4b5fd;
+            box-shadow: 0 12px 28px rgba(124, 58, 237, .12);
+        }
+
+        .master-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .master-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ede9fe;
+            color: #6d28d9;
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .master-card h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .master-card p {
+            margin: 8px 0 0;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .master-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .badge-soft {
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #f5f3ff;
+            color: #6d28d9;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .btn-link {
+            color: #6d28d9;
+            font-weight: 700;
             font-size: 12px;
         }
 
-        .export-actions {
+        .plant-form {
             display: flex;
-            gap: 8px;
+            gap: 10px;
+            align-items: end;
             flex-wrap: wrap;
+        }
+
+        .plant-form .field {
+            margin: 0;
+            min-width: 240px;
+        }
+
+        @media (max-width: 700px) {
+            .master-hero {
+                padding: 18px;
+            }
+
+            .plant-form {
+                width: 100%;
+            }
+
+            .plant-form .field {
+                width: 100%;
+                min-width: 0;
+            }
         }
     </style>
 
-    <div class="page-head">
-        <div>
-            <h2>Master Model & Produk {{ $scopeLabel }}</h2>
-            <div class="muted"></div>
-        </div>
 
-        <div class="export-actions">
-            <a class="btn btn-success" href="{{ route('omd.master.export.excel', $scope) }}">
-                Export Excel
-            </a>
-
-            <a class="btn btn-danger" href="{{ route('omd.master.export.pdf', $scope) }}">
-                Export PDF
-            </a>
-        </div>
+    {{-- Breadcrumb --}}
+    <div class="breadcrumb">
+        <span>Data Master</span>
+        <span>›</span>
+        <strong>{{ $scopeLabel }}</strong>
     </div>
 
-    <div class="grid2" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
-        <div class="card">
-            <h3 style="margin-top:0;">Tambah Model</h3>
 
-            <form method="POST" action="{{ route('omd.master.model.store', $scope) }}">
-                @csrf
+    {{-- Hero --}}
+    <div class="master-hero">
+        <h2>Data Master {{ $scopeLabel }}</h2>
 
-                <div class="field">
-                    <label for="model">Model</label>
-                    <input id="model" name="model" value="{{ old('model') }}" placeholder="Masukkan model" required>
-                </div>
-
-                <button class="btn btn-primary" style="margin-top:14px;">
-                    Simpan Model
-                </button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-top:0;">Tambah Produk</h3>
-            <div class="muted" style="margin-bottom:16px;"></div>
-
-            <form method="POST" action="{{ route('omd.master.product.store', $scope) }}">
-                @csrf
-
-                <div class="field">
-                    <label for="master_model_id">Model</label>
-                    <select id="master_model_id" name="master_model_id" required>
-                        <option value="">Pilih model</option>
-
-                        @foreach ($models as $model)
-                            <option value="{{ $model->id }}" @selected(old('master_model_id', $selectedModelId) == $model->id)>
-                                {{ $model->number }} - {{ $model->model }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="field" style="margin-top:14px;">
-                    <label for="product">Produk</label>
-                    <input id="product" name="product" value="{{ old('product') }}" placeholder="Masukkan produk" required>
-                </div>
-
-                <button class="btn btn-primary" style="margin-top:14px;">
-                    Simpan Produk
-                </button>
-            </form>
-        </div>
+        <p>
+            Pilih Plant terlebih dahulu untuk melihat Area / Line,
+            kemudian kelola Model dan Produk.
+        </p>
     </div>
 
-    <div class="card">
-        <div class="page-head" style="margin-bottom:16px;">
+
+    {{-- Tambah Plant --}}
+    <div class="card" style="margin-bottom:20px;">
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:16px;
+                flex-wrap:wrap;
+            "
+        >
+
             <div>
-                <h3 style="margin:0;">Data Model & Produk {{ $scopeLabel }}</h3>
-                <div class="muted">
+                <h3 style="margin:0;">
+                    Tambah Plant
+                </h3>
+
+                <div class="muted" style="margin-top:5px;">
+                    Tambahkan Plant untuk scope
+                    {{ $scopeLabel }}.
                 </div>
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ route('omd.master.plant.store', [
+                    'scope' => $scope
+                ]) }}"
+                class="plant-form"
+            >
+                @csrf
+
+                <div class="field">
+                    <label for="plant_name">
+                        Nama Plant
+                    </label>
+
+                    <input
+                        id="plant_name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Contoh: Unit"
+                        required
+                        maxlength="100"
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Tambah Plant
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    {{-- Header Plant --}}
+    <div class="page-head">
+
+        <div>
+            <h3 style="margin:0;">
+                Plant {{ $scopeLabel }}
+            </h3>
+
+            <div class="muted">
+                Pilih Plant untuk melihat Area / Line.
             </div>
         </div>
 
-        <div class="table-wrap">
-            <table class="table master-table">
-                <thead>
-                    <tr>
-                        <th class="col-no">No</th>
-                        <th class="col-model">Model</th>
-                        <th class="col-product-no">No. Produk</th>
-                        <th>Produk</th>
-                        <th class="col-action">Aksi</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    @forelse ($models as $model)
-                        @forelse ($model->products as $index => $product)
-                            <tr>
-                                @if ($index === 0)
-                                    <td class="col-no" rowspan="{{ $model->products->count() }}">
-                                        <b>{{ $model->number }}</b>
-                                    </td>
+        {{-- Export --}}
+        <div
+            class="export-actions"
+            style="display:flex;gap:8px;flex-wrap:wrap;"
+        >
 
-                                    <td class="col-model" rowspan="{{ $model->products->count() }}">
-                                        <b>{{ $model->model }}</b>
+            <a
+                class="btn btn-success"
+                href="{{ route('omd.master.export.excel', [
+                    'scope' => $scope
+                ]) }}"
+            >
+                Export Excel
+            </a>
 
-                                        <div style="margin-top:8px;">
-                                            <a class="btn btn-secondary btn-sm"
-                                                href="{{ route('omd.master.model.edit', [$scope, $model]) }}">
-                                                Edit Model
-                                            </a>
-                                        </div>
-                                    </td>
-                                @endif
+            <a
+                class="btn btn-danger"
+                href="{{ route('omd.master.export.pdf', [
+                    'scope' => $scope
+                ]) }}"
+            >
+                Export PDF
+            </a>
 
-                                <td class="col-product-no">
-                                    {{ $index + 1 }}
-                                </td>
-
-                                <td>
-                                    {{ $product->name }}
-                                </td>
-
-                                <td class="col-action">
-                                    <div class="action-inline">
-                                        <a class="btn btn-secondary btn-sm"
-                                            href="{{ route('omd.master.product.edit', [$scope, $product]) }}">
-                                            Edit
-                                        </a>
-
-                                        <form method="POST"
-                                            action="{{ route('omd.master.product.destroy', [$scope, $product]) }}"
-                                            onsubmit="return confirm('Hapus produk {{ addslashes($product->name) }}?')">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button class="btn btn-danger btn-sm">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="col-no">
-                                    <b>{{ $model->number }}</b>
-                                </td>
-
-                                <td class="col-model">
-                                    <b>{{ $model->model }}</b>
-
-                                    <div style="margin-top:8px;">
-                                        <a class="btn btn-secondary btn-sm"
-                                            href="{{ route('omd.master.model.edit', [$scope, $model]) }}">
-                                            Edit Model
-                                        </a>
-                                    </div>
-                                </td>
-
-                                <td class="col-product-no">-</td>
-
-                                <td class="muted">
-                                    Belum ada produk.
-                                </td>
-
-                                <td class="col-action">
-                                    <form method="POST" action="{{ route('omd.master.model.destroy', [$scope, $model]) }}"
-                                        onsubmit="return confirm('Hapus model {{ addslashes($model->model) }}?')">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button class="btn btn-danger btn-sm">
-                                            Hapus Model
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforelse
-                    @empty
-                        <tr>
-                            <td colspan="5" class="empty">
-                                Belum ada data model {{ $scopeLabel }}.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
         </div>
+
     </div>
+
+
+    {{-- Daftar Plant --}}
+    @if ($plants->isEmpty())
+
+        <div class="card">
+
+            <strong>
+                Belum ada Plant {{ $scopeLabel }}.
+            </strong>
+
+            <div
+                class="muted"
+                style="margin-top:6px;"
+            >
+                Tambahkan Plant terlebih dahulu
+                untuk membuat struktur Area / Line.
+            </div>
+
+        </div>
+
+    @else
+
+        <div class="master-grid">
+
+            @foreach ($plants as $plant)
+
+                <a
+                    class="master-card"
+                    href="{{ route('omd.master.plant.index', [
+                        'scope' => $scope,
+                        'plant' => $plant
+                    ]) }}"
+                >
+
+                    <div class="master-card-top">
+
+                        <div class="master-icon">
+                            ▣
+                        </div>
+
+                        <span class="badge-soft">
+                            {{ $plant->areas_count }} Area / Line
+                        </span>
+
+                    </div>
+
+
+                    <div style="margin-top:16px;">
+
+                        <h3>
+                            {{ $plant->name }}
+                        </h3>
+
+                        <p>
+                            Kelola Area / Line
+                            pada Plant {{ $plant->name }}.
+                        </p>
+
+                    </div>
+
+
+                    <div class="master-card-footer">
+
+                        <span class="muted">
+                            Scope {{ strtoupper($plant->data_scope) }}
+                        </span>
+
+                        <span class="btn-link">
+                            Lihat Area →
+                        </span>
+
+                    </div>
+
+                </a>
+
+            @endforeach
+
+        </div>
+
+    @endif
+
 @endsection
