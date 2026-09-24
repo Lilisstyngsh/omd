@@ -1,0 +1,138 @@
+<?php $__env->startSection('title', 'Detail Order'); ?>
+<?php $__env->startSection('header', 'Detail Order'); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="page-head">
+        <div>
+            <h2><?php echo e($order->order_number); ?></h2>
+
+            <span class="badge badge-<?php echo e($order->status); ?>">
+                <?php echo e($order->status_label); ?>
+
+            </span>
+        </div>
+
+        <a class="btn btn-secondary" href="<?php echo e(route('user.orders.index')); ?>">
+            Kembali
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <span>Area</span>
+                <strong>
+                    <?php echo e($order->area->category); ?> - <?php echo e($order->area->name); ?>
+
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Produk</span>
+                <strong>
+                    <?php echo e($order->product->name); ?>
+
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Model</span>
+                <strong>
+                    <?php echo e($order->masterModel?->model ?? $order->model ?? '-'); ?>
+
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Jenis NG</span>
+                <strong>
+                    <?php echo e($order->ngType->code); ?> - <?php echo e($order->ngType->name); ?>
+
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Quantity</span>
+                <strong>
+                    <?php echo e($order->quantity); ?>
+
+                </strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Tanggal</span>
+                <strong>
+                    <?php echo e($order->order_date->format('d/m/Y')); ?>
+
+                </strong>
+            </div>
+
+        </div>
+
+        <div style="margin-top:18px">
+            <b>Keterangan</b>
+
+            <p class="muted">
+                <?php echo e($order->description ?: '-'); ?>
+
+            </p>
+        </div>
+    </div>
+
+    <?php if($order->result): ?>
+        <div class="card" style="margin-top:18px">
+            <h3>Hasil Repair</h3>
+
+            <div class="detail-grid">
+
+                <div class="detail-item">
+                    <span>OK</span>
+                    <strong>
+                        <?php echo e($order->result->ok_qty); ?>
+
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>SCRAP</span>
+                    <strong>
+                        <?php echo e($order->result->scrap_qty); ?>
+
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>NG</span>
+                    <strong>
+                        <?php echo e($order->result->ng_qty); ?>
+
+                    </strong>
+                </div>
+
+            </div>
+
+            <p class="muted">
+                <?php echo e($order->result->notes ?: 'Tidak ada catatan.'); ?>
+
+            </p>
+        </div>
+    <?php endif; ?>
+
+    <?php if($order->status === 'completed'): ?>
+        <form
+            method="POST"
+            action="<?php echo e(route('user.orders.confirm', $order)); ?>"
+            style="margin-top:18px"
+        >
+            <?php echo csrf_field(); ?>
+
+            <button class="btn btn-success">
+                Konfirmasi Hasil / Serah Terima
+            </button>
+        </form>
+    <?php endif; ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\omd\resources\views/user/orders/show.blade.php ENDPATH**/ ?>

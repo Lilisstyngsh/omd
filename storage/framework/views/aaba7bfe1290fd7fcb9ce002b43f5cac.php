@@ -1,0 +1,227 @@
+<?php $__env->startSection('title', 'Proses Order'); ?>
+<?php $__env->startSection('header', 'Proses Order'); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="page-head">
+        <div>
+            <h2><?php echo e($order->order_number); ?></h2>
+
+            <span class="badge badge-<?php echo e($order->status); ?>">
+                <?php echo e($order->status_label); ?>
+
+            </span>
+        </div>
+
+        <a class="btn btn-secondary" href="<?php echo e(route('omd.orders.index')); ?>">
+            Kembali
+        </a>
+    </div>
+
+    <div class="grid2">
+
+        <div>
+            <div class="card">
+                <h3>Informasi Order</h3>
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <span>User</span>
+                        <strong><?php echo e($order->user->name); ?></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Area</span>
+                        <strong>
+                            <?php echo e($order->area->category); ?> - <?php echo e($order->area->name); ?>
+
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Produk</span>
+                        <strong><?php echo e($order->product->name); ?></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Model</span>
+                        <strong><?php echo e($order->masterModel?->model ?? $order->model ?? '-'); ?></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Jenis NG</span>
+                        <strong>
+                            <?php echo e($order->ngType->code); ?> - <?php echo e($order->ngType->name); ?>
+
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span>Quantity</span>
+                        <strong><?php echo e($order->quantity); ?></strong>
+                    </div>
+
+                </div>
+
+                <p class="muted" style="margin-top:16px">
+                    <?php echo e($order->description ?: 'Tidak ada keterangan.'); ?>
+
+                </p>
+            </div>
+
+            <div class="card" style="margin-top:18px">
+                <h3>Aksi OMD</h3>
+
+                <div class="actions">
+
+                    <?php if($order->status === 'submitted'): ?>
+                        <form method="POST" action="<?php echo e(route('omd.orders.verify', $order)); ?>">
+                            <?php echo csrf_field(); ?>
+
+                            <button class="btn btn-primary">
+                                Verifikasi Order
+                            </button>
+                        </form>
+
+                    <?php elseif($order->status === 'verified'): ?>
+                        <form method="POST" action="<?php echo e(route('omd.orders.start', $order)); ?>">
+                            <?php echo csrf_field(); ?>
+
+                            <button class="btn btn-warning">
+                                Mulai Repair
+                            </button>
+                        </form>
+
+                    <?php elseif($order->status === 'in_repair'): ?>
+                        <span class="muted">
+                            Silakan isi hasil repair di form berikut.
+                        </span>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+
+            <?php if(in_array($order->status, ['verified', 'in_repair'])): ?>
+                <div class="card" style="margin-top:18px">
+                    <h3>Input Hasil Repair</h3>
+
+                    <form method="POST" action="<?php echo e(route('omd.orders.complete', $order)); ?>">
+                        <?php echo csrf_field(); ?>
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>OK</label>
+
+                                <input
+                                    type="number"
+                                    name="ok_qty"
+                                    min="0"
+                                    max="<?php echo e($order->quantity); ?>"
+                                    value="<?php echo e(old('ok_qty', $order->quantity)); ?>"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>SCRAP</label>
+
+                                <input
+                                    type="number"
+                                    name="scrap_qty"
+                                    min="0"
+                                    value="<?php echo e(old('scrap_qty', 0)); ?>"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>NG</label>
+
+                                <input
+                                    type="number"
+                                    name="ng_qty"
+                                    min="0"
+                                    value="<?php echo e(old('ng_qty', 0)); ?>"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field full">
+                                <label>Catatan</label>
+
+                                <textarea name="notes"><?php echo e(old('notes')); ?></textarea>
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success" style="margin-top:14px">
+                            Simpan Hasil & Selesaikan
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <div>
+            <div class="card">
+                <h3>Progress</h3>
+
+                <div class="timeline">
+
+                    <div class="timeline-item">
+                        <b>Submitted</b>
+                        <p>
+                            Order dibuat oleh user.
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <b>Verified</b>
+                        <p>
+                            <?php echo e($order->verified_at
+                                ? $order->verified_at->format('d/m/Y H:i')
+                                : 'Menunggu verifikasi.'); ?>
+
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <b>In Repair</b>
+                        <p>
+                            <?php echo e($order->repair_started_at
+                                ? $order->repair_started_at->format('d/m/Y H:i')
+                                : 'Menunggu proses repair.'); ?>
+
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <b>Completed</b>
+                        <p>
+                            <?php echo e($order->repair_completed_at
+                                ? $order->repair_completed_at->format('d/m/Y H:i')
+                                : 'Menunggu hasil repair.'); ?>
+
+                        </p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <b>Confirmed</b>
+                        <p>
+                            <?php echo e($order->status === 'confirmed'
+                                ? 'Sudah dikonfirmasi user.'
+                                : 'Menunggu konfirmasi user.'); ?>
+
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\omd\resources\views/omd/orders/show.blade.php ENDPATH**/ ?>
