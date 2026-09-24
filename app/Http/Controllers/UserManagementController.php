@@ -95,7 +95,7 @@ class UserManagementController extends Controller
 
         $validated = $request->validate([
             'name' => [
-                'required',
+                
                 'string',
                 'max:100',
             ],
