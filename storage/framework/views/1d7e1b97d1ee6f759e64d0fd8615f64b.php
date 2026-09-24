@@ -8,7 +8,6 @@
             <h2>Monitoring Repair Box</h2>
 
             <div class="muted">
-                Ringkasan order dan hasil repair berdasarkan periode yang dipilih.
             </div>
         </div>
     </div>

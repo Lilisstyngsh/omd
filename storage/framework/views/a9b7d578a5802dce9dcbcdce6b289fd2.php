@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Manajemen Akun'); ?>
 <?php $__env->startSection('header', 'Manajemen Akun'); ?>
 
